@@ -13,10 +13,10 @@ Run: ```docker build -t balancer .```
 Run: ```docker run --rm -it -p XXXX:8080 balancer``` (where XXXX is the port you wish to expose on).
 
 ## How to access the service
-Two endpoints are defined for JSON and SBML.
+Two endpoints are defined for JSON and SBML. Both use POST.
 
 ### JSON
-The JSON endpoint accepts a reaction in the following format...
+The JSON endpoint at ```http://<URL>:<PORT>/balance/json``` accepts a reaction in the following format...
 ```
 { <reaction id> : [	[formula, charge, stoichiometry, <molecularSpecies_id>]  ]}
 ```
@@ -50,7 +50,7 @@ For example...
 ```
 
 ### SBML
-The SBML endpoint expects SBML Level 3 with the 'fbc' package used to store molecular species' ```chemicalFormula``` and ```charge```. Earlier SBML levels will be rejected by the service.
+The SBML endpoint at ```http://<URL>:<PORT>/balance/SBML``` expects SBML Level 3 with the 'fbc' package used to store molecular species' ```chemicalFormula``` and ```charge```. Earlier SBML levels will be rejected by the service. Use POST to send SBML as data.
 
 Existing balanced reactions maintain original stoichiometries and tagged (in ```Notes```) as 'already balanced'.
 Unbalanced reactions brought into balance are tagged as 'brought into balance'.
