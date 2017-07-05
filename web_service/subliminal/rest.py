@@ -13,7 +13,6 @@ from flask import Flask, request
 from flask_restful import Resource
 import balance, json, tempfile
 import sbml_service as sbserv
-import traceback
 
 #Initialise app
 app = Flask(__name__)
@@ -102,4 +101,4 @@ def sbml():
 
 if __name__ == '__main__':
 	#main()
-	app.run(host='0.0.0.0',debug=True, port=8080, threaded=True)
+	app.run(host='0.0.0.0',debug=False, port=8080, threaded=True)
