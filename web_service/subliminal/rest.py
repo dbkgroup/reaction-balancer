@@ -78,7 +78,7 @@ def human():
 				'<head><title>reaction-balancer</title></head>'
 				'<body>'
 				'This web service checks and corrects the stoichiometries of chemical reactions.<br><br>'
-				'See <a href="https://github.com/porld/reaction-balancer">Github<a/> for full details'
+				'See <a href="https://github.com/metabolicmodelling/reaction-balancer">Github<a/> for full details'
 				'</body>'
 				'</html>')
 	return message
