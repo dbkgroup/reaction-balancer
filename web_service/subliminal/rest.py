@@ -23,12 +23,8 @@ def list_balancer(listOfRxns):
 	for id in listOfRxns:
 		rxn = listOfRxns[id]
 		try:
-			print 'Balancing...'
 			is_balanced, was_balanced, balanced_rxn = balance.balance_reac(rxn)
-			print '...done'
-			print 'Simplifying...'
 			balanced_rxn = simplifier(balanced_rxn)
-			print '...done'
 			if was_balanced:
 				msg = 'already balanced'
 			else:
