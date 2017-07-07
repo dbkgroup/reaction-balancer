@@ -36,9 +36,11 @@ RUN pip install subliminal-py
 
 # Make current directory visible inside Docker container:
 RUN cd home/
-COPY rest.py /home
+#COPY rest.py /home
 WORKDIR /home
+RUN git clone https://github.com/dbkgroup/reaction-balancer.git
+RUN ls
 
 # Run test:
 ENTRYPOINT ["python"]
-CMD ["rest.py"]
+CMD ["reaction-balancer/rest.py"]
