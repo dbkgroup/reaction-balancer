@@ -31,9 +31,12 @@ RUN pip install flask \
 # Update paths:
 ENV LD_LIBRARY_PATH /usr/local/lib:${LD_LIBRARY_PATH}
 
+# Install subliminal-py
+RUN pip install subliminal-py
+
 # Make current directory visible inside Docker container:
 RUN cd home/
-COPY ./subliminal /home
+COPY . /home
 WORKDIR /home
 
 # Run test:
