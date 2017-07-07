@@ -36,7 +36,7 @@ RUN pip install subliminal-py
 
 # Make current directory visible inside Docker container:
 RUN cd home/
-COPY . /home
+COPY rest.py /home
 WORKDIR /home
 
 # Run test:
