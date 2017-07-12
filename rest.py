@@ -332,9 +332,11 @@ def manual():
 		
 		print 'Converting result...'
 		reaction = results["human"]
+		print reaction
 		reactants = []
 		products = []
 		for component in reaction:
+			print component
 			formula = component[0]
 			charge = component[1]
 			stoich = int(component[2])
