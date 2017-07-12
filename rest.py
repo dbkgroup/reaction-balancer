@@ -346,8 +346,8 @@ def manual():
 		productString = ' + '.join(products)
 		reactionString = reactantString + '  ->  ' + productString
 		return reactionString
-	except:
-		return 'Error'
+	except Exception, e:
+		return 'Error', str(e)
 
 #JSON endpoint
 @app.route('/balance/json', methods=['POST'])
