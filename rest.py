@@ -331,7 +331,11 @@ def manual():
 		print '...complete'
 		
 		print 'Converting result...'
-		reaction = results["human"]
+		response = results["human"]
+		reaction = response[0]
+		was_balanced = response[1]
+		is_balanced = response[2]
+		msg = response[3]
 		print reaction
 		reactants = []
 		products = []
