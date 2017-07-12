@@ -17,7 +17,7 @@ from subliminal import balance
 import json
 
 #Initialise app
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='')
 CORS(app)
 api = Api(app)
 
@@ -307,12 +307,12 @@ def sbml_balancer(string):
 	return False
 
 #Endpoint for humans to read
-@app.route('/balance', methods=['GET'])
-def human():
-	message = '<html><head><title>reaction-balancer with JS</title></head><body>This web service checks and corrects the stoichiometries of chemical reactions.<br><br>See <a href="https://github.com/dbkgroup/reaction-balancer">DBK Group Github<a/> for full details<br><br>You can also trial the reaction balancer manually below.<br><br><form name="myForm">	<div name="reaction"></div>	Reactants:<br>	<input type="text" name="reactant1.name" placeholder="name"></input>	<input type="text" name="reactant1.formula" placeholder="formula"></input>	<input type="text" name="reactant1.charge" placeholder="charge"></input><br>	<input type="text" name="reactant2.name" placeholder="name"></input>	<input type="text" name="reactant2.formula" placeholder="formula"></input>	<input type="text" name="reactant2.charge" placeholder="charge"></input><br>	<input type="text" name="reactant3.name" placeholder="name"></input>	<input type="text" name="reactant3.formula" placeholder="formula"></input>	<input type="text" name="reactant3.charge" placeholder="charge"></input>	<br><br>	Products:<br>	<input type="text" name="product1.name" placeholder="name"></input>	<input type="text" name="product1.formula" placeholder="formula"></input>	<input type="text" name="product1.charge" placeholder="charge"></input><br>	<input type="text" name="product2.name" placeholder="name"></input>	<input type="text" name="product2.formula" placeholder="formula"></input>	<input type="text" name="product2.charge" placeholder="charge"></input><br>	<input type="text" name="product3.name" placeholder="name"></input>	<input type="text" name="product3.formula" placeholder="formula"></input>	<input type="text" name="product3.charge" placeholder="charge"></input>	<br>	<button type="button" onclick="balanceString()">Balance</button></form><div id="balance"></div><script>function balanceString() {	//Reactants	var r1name = document.forms["myForm"]["reactant1.name"].value;	var r2name = document.forms["myForm"]["reactant2.name"].value;	var r3name = document.forms["myForm"]["reactant3.name"].value;	var r1formula = document.forms["myForm"]["reactant1.formula"].value;	var r2formula = document.forms["myForm"]["reactant2.formula"].value;	var r3formula = document.forms["myForm"]["reactant3.formula"].value;	var r1charge = document.forms["myForm"]["reactant1.charge"].value;	var r2charge = document.forms["myForm"]["reactant2.charge"].value;	var r3charge = document.forms["myForm"]["reactant3.charge"].value;	//Products	var p1name = document.forms["myForm"]["product1.name"].value;	var p2name = document.forms["myForm"]["product2.name"].value;	var p3name = document.forms["myForm"]["product3.name"].value;	var p1formula = document.forms["myForm"]["product1.formula"].value;	var p2formula = document.forms["myForm"]["product2.formula"].value;	var p3formula = document.forms["myForm"]["product3.formula"].value;	var p1charge = document.forms["myForm"]["product1.charge"].value;	var p2charge = document.forms["myForm"]["product2.charge"].value;	var p3charge = document.forms["myForm"]["product3.charge"].value;		var rxn = [[r1formula,r1charge,-1,r1name],[r2formula,r2charge,-1,r2name],[r3formula,r3charge,-1,r3name],[p1formula,p1charge,1,p1name],[p2formula,p2charge,1,p2name],[p3formula,p3charge,1,p3name]];	console.log("Reaction:", rxn);		document.getElementById("balance").innerHTML = 'Balancing...';	var xhttp = new XMLHttpRequest();	xhttp.onreadystatechange = function() {		if (this.readyState == 4 && this.status == 200) {			console.log('You said', this.responseText);			document.getElementById("balance").innerHTML = this.responseText;			} 		};	xhttp.open("POST", "/balance/manual", true);  	xhttp.send( JSON.stringify(rxn) );	return false;	}</script></body></html>'
-	return message
+#Landing page
+@app.route('/')
+def index():
+	return app.send_static_file('index.html')
 
-#Endpoint for humans to read
+#Endpoint to be used by human UI
 @app.route('/balance/manual', methods=['POST'])
 def manual():
 	print 'Human UI'
