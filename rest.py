@@ -204,12 +204,35 @@ def serviceFormat_to_sbml(doc,processed,lost):
 				note = 'AUTO-BALANCER: already balanced'
 			else:
 				if is_balanced:
-					#Make a mini dictionary of results
+					#Make a mini dictionary of results and add in balancer metabolites
 					mini = {}
 					for c in rxn:
 						id = c[3]
 						stoich = c[2]
 						mini[id] = stoich
+						if id is 'h2o_balancer':
+							if stoich < 0:
+								reactant = reaction.createReactant()
+								reactant.setSpecies("h2o_balancer")
+								reactant.setStoichiometry(-1*stoich)
+								reactant.setConstant(False)
+							else:
+								product = reaction.createProduct()
+								product.setSpecies("h2o_balancer")
+								product.setStoichiometry(stoich)
+								product.setConstant(False)
+						if id is 'h_balancer':
+							if stoich < 0:
+								reactant = reaction.createReactant()
+								reactant.setSpecies("h_balancer")
+								reactant.setStoichiometry(-1*stoich)
+								reactant.setConstant(False)
+							else:
+								product = reaction.createProduct()
+								product.setSpecies("h_balancer")
+								product.setStoichiometry(stoich)
+								product.setConstant(False)
+						
 					#Push results into model
 					reactants = reaction.getListOfReactants()
 					for reactant in reactants:
