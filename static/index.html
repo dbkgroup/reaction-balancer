@@ -2,17 +2,20 @@
 <head><title>reaction-balancer with JS</title>
 </head>
 <body>
-This web service checks and corrects the stoichiometries of chemical reactions.<br><br>
-See <a href="https://github.com/dbkgroup/reaction-balancer">DBK Group Github<a/> for full details
+<h1>Reaction Balancer</h1>
+Calculate chemical reaction stoichiometries.<br><br>
+This is the website for humans accompanying a web service (for computer-to-computer communications) that uses linear programming to calculate reaction stoichiometries. In short, given a reaction with formulae and charges the service will try to balance the components. See <a href="https://github.com/dbkgroup/reaction-balancer">DBK Group Github<a/> for full details.
 <br><br>
-You can also trial the reaction balancer manually below.<br><br>
+The sample reaction below describes the gross photosynthetic reaction: CO<sub>2</sub> + H<sub>2</sub>O -> C<sub>6</sub>H<sub>12</sub>O<sub>6</sub> + 0<sub>2</sub>. Stoichiometric coefficients are all implicitly and incorrectly set to one. The necessary water reactant is missing entirely. The balancing service adds the water and finds the correct stoichiometries.
+<br><br>
+You can trial the reaction balancer manually below.<br><br>
 <form name="myForm">
 	<div name="reaction"></div>
 
 	Reactants:<br>
-	<input type="text" name="reactant1.name" placeholder="name"></input>
-	<input type="text" name="reactant1.formula" placeholder="formula"></input>
-	<input type="text" name="reactant1.charge" placeholder="charge"></input><br>
+	<input type="text" name="reactant1.name" placeholder="carbon dioxide"></input>
+	<input type="text" name="reactant1.formula" placeholder="CO2"></input>
+	<input type="text" name="reactant1.charge" placeholder="0"></input><br>
 	<input type="text" name="reactant2.name" placeholder="name"></input>
 	<input type="text" name="reactant2.formula" placeholder="formula"></input>
 	<input type="text" name="reactant2.charge" placeholder="charge"></input><br>
@@ -22,17 +25,17 @@ You can also trial the reaction balancer manually below.<br><br>
 
 	<br><br>
 	Products:<br>
-	<input type="text" name="product1.name" placeholder="name"></input>
-	<input type="text" name="product1.formula" placeholder="formula"></input>
-	<input type="text" name="product1.charge" placeholder="charge"></input><br>
-	<input type="text" name="product2.name" placeholder="name"></input>
-	<input type="text" name="product2.formula" placeholder="formula"></input>
-	<input type="text" name="product2.charge" placeholder="charge"></input><br>
+	<input type="text" name="product1.name" placeholder="glucose"></input>
+	<input type="text" name="product1.formula" placeholder="C6H12O6"></input>
+	<input type="text" name="product1.charge" placeholder="0"></input><br>
+	<input type="text" name="product2.name" placeholder="oxygen"></input>
+	<input type="text" name="product2.formula" placeholder="O2"></input>
+	<input type="text" name="product2.charge" placeholder="0"></input><br>
 	<input type="text" name="product3.name" placeholder="name"></input>
 	<input type="text" name="product3.formula" placeholder="formula"></input>
 	<input type="text" name="product3.charge" placeholder="charge"></input>
 
-	<br>
+	<br><br>
 	<button type="button" onclick="balanceString()">Balance</button>
 </form>
 
