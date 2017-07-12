@@ -318,15 +318,19 @@ def index():
 @app.route('/balance/manual', methods=['POST'])
 def manual():
 	print 'Human UI'
-	try:
-		content = request.get_json(force=True)
-		tidyList = []
-		for c in content:
-			if str(c[0]) is not '':
-				tidyComponent = [ str(c[0]), int(c[1]), float(c[2]), str(c[3]) ]
-				tidyList.append(tidyComponent)
+	content = request.get_json(force=True)
+	tidyList = []
+	for c in content:
+		if str(c[0]) is not '':
+			tidyComponent = [ str(c[0]), int(c[1]), float(c[2]), str(c[3]) ]
+			tidyList.append(tidyComponent)
+	if len(tidyList) > 0:
 		serviceFormat = { "human" : tidyList}
+		print 'Hitting balancer...'
 		results = list_balancer(serviceFormat)
+		print '...complete'
+		
+		print 'Converting result...'
 		reaction = results["human"]
 		reactants = []
 		products = []
@@ -345,9 +349,10 @@ def manual():
 		reactantString = ' + '.join(reactants)
 		productString = ' + '.join(products)
 		reactionString = reactantString + '  ->  ' + productString
+		print reactionString
 		return reactionString
-	except Exception, e:
-		return 'Error', str(e)
+	else:
+		return 'Nothing to balance'
 
 #JSON endpoint
 @app.route('/balance/json', methods=['POST'])
