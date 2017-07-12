@@ -34,6 +34,9 @@ ENV LD_LIBRARY_PATH /usr/local/lib:${LD_LIBRARY_PATH}
 # Install subliminal-py
 RUN pip install subliminal-py
 
+# Install Flask-CORS
+pip install flask-cors
+
 # Make current directory visible inside Docker container:
 RUN cd home/
 WORKDIR /home
