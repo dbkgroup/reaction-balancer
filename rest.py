@@ -21,6 +21,7 @@ app = Flask(__name__, static_url_path='')
 CORS(app)
 api = Api(app)
 
+#----------------------------------------------------------
 #Where the balancing hookup occurs
 def list_balancer(listOfRxns):
 	results = {}
@@ -305,6 +306,7 @@ def sbml_balancer(string):
 			return 'Could not update SBML file with balance results', str(e)
 
 	return False
+#----------------------------------------------------------
 
 #Endpoint for humans to read
 #Landing page
