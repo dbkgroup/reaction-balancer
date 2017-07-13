@@ -1,9 +1,10 @@
 # Automatic chemical reaction balancer
-A web service for automatically balancing chemical reaction stoichiometries.
+A web service for automatically balancing chemical reaction stoichiometries. You will need to install Docker to run the service locally.
 
-## How to set up the service
-Install Docker.
+## From Docker
+```docker run -p XXXX:8080 compsysbio/reaction-balancer``` (where XXXX is the port you wish to expose on).
 
+## How to set up the service from Github
 Clone or download the repository.
 
 Move into the web_service folder.
