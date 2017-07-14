@@ -349,39 +349,40 @@ def manual():
 			tidyList.append(tidyComponent)
 	if len(tidyList) > 0:
 		serviceFormat = { "human" : tidyList}
-		print 'Hitting balancer...'
-		results = list_balancer(serviceFormat)
-		print '...complete'
-		
-		print 'Converting result...'
-		response = results["human"]
-		reaction = response[0]
-		was_balanced = response[1]
-		is_balanced = response[2]
-		msg = response[3]
-		print reaction
-		reactants = []
-		products = []
-		for component in reaction:
-			print component
-			formula = component[0]
-			charge = component[1]
-			stoich = int(component[2])
-			name = component[3]
-			if stoich < 0:
-				stoich = stoich * -1
-				elem = str(stoich) + '.' + name
-				reactants.append(elem)
-			else:
-				elem = str(stoich) + '.' + name
-				products.append(elem)
-		reactantString = ' + '.join(reactants)
-		productString = ' + '.join(products)
-		reactionString = reactantString + '  ->  ' + productString
-		print reactionString
-		return reactionString
 	else:
-		return 'Nothing to balance'
+		print 'Running default...'
+		serviceFormat = { "human" : [["CO2",0,-1.0,"carbon dioxide"],["C6H12O6",0,1.0,"glucose"],["O2",0,1.0,"oxygen"]] }
+	print 'Hitting balancer...'
+	results = list_balancer(serviceFormat)
+	print '...complete'
+	
+	print 'Converting result...'
+	response = results["human"]
+	reaction = response[0]
+	was_balanced = response[1]
+	is_balanced = response[2]
+	msg = response[3]
+	print reaction
+	reactants = []
+	products = []
+	for component in reaction:
+		print component
+		formula = component[0]
+		charge = component[1]
+		stoich = int(component[2])
+		name = component[3]
+		if stoich < 0:
+			stoich = stoich * -1
+			elem = str(stoich) + '.' + name
+			reactants.append(elem)
+		else:
+			elem = str(stoich) + '.' + name
+			products.append(elem)
+	reactantString = ' + '.join(reactants)
+	productString = ' + '.join(products)
+	reactionString = reactantString + '  ->  ' + productString
+	print reactionString
+	return reactionString
 
 #JSON endpoint
 @app.route('/balance/json', methods=['POST'])
