@@ -188,10 +188,10 @@ def serviceFormat_to_sbml(doc,processed,lost):
 			print 'Processed', rid
 			dense = processed[rid]
 			print dense
-			rxn = dense[0]
-			was_balanced = dense[1]
-			is_balanced = dense[2]
-			msg = dense[3]
+			rxn = dense["reaction"]
+			was_balanced = dense["was_balanced"]
+			is_balanced = dense["is_balanced"]
+			msg = dense["message"]
 			
 			#Look for changes
 			if was_balanced:
@@ -325,8 +325,7 @@ def sbml_balancer(string):
 		#Hit balancer
 		try:
 			processed = list_balancer(processable)
-			#print processed
-			print 'Hit list_balancer'
+			print 'From list balancer:', processed
 		except:
 			return 'Problem hitting balancer'
 
