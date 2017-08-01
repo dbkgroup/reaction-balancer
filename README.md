@@ -18,14 +18,14 @@ Two endpoints are defined for JSON and SBML. Both use POST.
 ### JSON
 The JSON endpoint at ```http://<URL>:<PORT>/balance/json``` accepts a reaction in the following format...
 ```
-{ <reaction id> : [	[formula, charge, stoichiometry, <molecularSpecies_id>]  ]}
+{ <reaction id> : [	{"formula":<formula>, "charge":<charge>, "stoichiometry":<stoichiometry>, "name":<molecularSpecies_name>]  ]}
 ```
 An example follows (incomplete gross photosynthetic reaction)...
 ```
 { "photosynthesis" :
   [	{"formula":"CO2", "charge":0, "stoichiometry":-1.0, "name":"carbon dioxide"},
     {"formula":"C6H12O6", "charge":0, "stoichiometry":1.0, "name":"glucose"},
-    {"formula":"O2", "charge":0, "stiochiometry":1.0, "name":"oxygen"]
+    {"formula":"O2", "charge":0, "stiochiometry":1.0, "name":"oxygen"}
   ]}
 ```
 The response is as follows...

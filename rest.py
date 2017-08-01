@@ -384,9 +384,11 @@ def manual():
 #JSON endpoint
 @app.route('/balance/json', methods=['POST'])
 def list_json():
+	print 'JSON balancer'
 	verboseListOfRxns = request.get_json(force=True)
 
 	#Convert verbose JSON to Subliminal format
+	print 'Convert verbose JSON to Subliminal format'
 	listOfRxns = {}
 	for rid in listOfRxns:
 		rxn = listOfRxns[rid]
@@ -403,11 +405,14 @@ def list_json():
 		
 		#Add set to listOfRxns
 		listOfRxns[rid] = subliminal
+	print listOfRxns
 
 	#Run balance
+	print 'Run balancer'
 	newListOfRxns = list_balancer(listOfRxns)
 
 	#Convert Subliminal format to more verbose JSON
+	print 'Convert Subliminal format to verbose JSON'
 	results = {}
 	for rid in newListOfRxns:
 		result = newListOfRxns[rid]
