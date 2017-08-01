@@ -13,7 +13,7 @@ from flask import Flask, request
 from flask_restful import Resource, Api
 from flask_cors import CORS, cross_origin
 from libsbml import *
-from subliminal import balance
+#from subliminal import balance
 import json
 
 #Initialise app
@@ -436,7 +436,7 @@ def list_json():
 			verbose_reaction.append( {"formula":formula,"charge":charge,"stoichiometry":stoichiometry,"name":name} )
 
 		#Update results list
-		results[rid] = {"reaction":verbose_reaction,"was_balanced":was_balanced,"is_balanced":is_balanced,"message":message}			results[rid] = verbose_reaction
+		results[rid] = {"reaction":verbose_reaction,"was_balanced":was_balanced,"is_balanced":is_balanced,"message":message}
 
 	return json.dumps(results)
 
