@@ -2,7 +2,7 @@
 	"variables": [],
 	"info": {
 		"name": "reaction-balancer",
-		"_postman_id": "bf30fb77-d205-8a5f-37e1-9acf61a1f206",
+		"_postman_id": "b2bea482-c95f-91cb-46f9-d6377d9e6892",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
@@ -10,7 +10,7 @@
 		{
 			"name": "http://knime.mib.man.ac.uk:8080/balance/SBML",
 			"request": {
-				"url": "http://knime.mib.man.ac.uk:8080/balance/SBML",
+				"url": "http://localhost:8080/balance/SBML",
 				"method": "POST",
 				"header": [
 					{
@@ -22,7 +22,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<sbml xmlns=\"http://www.sbml.org/sbml/level3/version1/core\" xmlns:fbc=\"http://www.sbml.org/sbml/level3/version1/fbc/version1\" level=\"3\" version=\"1\" fbc:required=\"false\">\n  <model>\n    <listOfCompartments>\n      <compartment id=\"compartment\" size=\"1\" constant=\"true\"/>\n    </listOfCompartments>\n    <listOfSpecies>\n      <species id=\"s1\" name=\"carbon dioxide\" compartment=\"compartment\" hasOnlySubstanceUnits=\"false\" boundaryCondition=\"false\" constant=\"false\" fbc:charge=\"0\" fbc:chemicalFormula=\"CO2\"/>\n      <species id=\"s2\" name=\"glucose\" compartment=\"compartment\" hasOnlySubstanceUnits=\"false\" boundaryCondition=\"false\" constant=\"false\" fbc:charge=\"0\" fbc:chemicalFormula=\"O2\"/>\n      <species id=\"s3\" name=\"oxygen\" compartment=\"compartment\" hasOnlySubstanceUnits=\"false\" boundaryCondition=\"false\" constant=\"false\"/>\n    </listOfSpecies>\n    <listOfReactions>\n      <reaction id=\"r1\" reversible=\"false\" fast=\"false\">\n        <notes>\n          <body xmlns=\"http://www.w3.org/1999/xhtml\">\n            <p>here is my note</p>\n          </body>\n        </notes>\n        <listOfReactants>\n          <speciesReference species=\"s1\" stoichiometry=\"-1\" constant=\"false\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference species=\"s2\" stoichiometry=\"1\" constant=\"false\"/>\n          <speciesReference species=\"s3\" stoichiometry=\"1\" constant=\"false\"/>\n        </listOfProducts>\n      </reaction>\n    </listOfReactions>\n  </model>\n</sbml>"
+					"raw": "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<sbml xmlns=\"http://www.sbml.org/sbml/level3/version1/core\" xmlns:fbc=\"http://www.sbml.org/sbml/level3/version1/fbc/version1\" level=\"3\" version=\"1\" fbc:required=\"false\">\n  <model>\n    <listOfCompartments>\n      <compartment id=\"compartment\" size=\"1\" constant=\"true\"/>\n    </listOfCompartments>\n    <listOfSpecies>\n      <species id=\"s1\" name=\"carbon dioxide\" compartment=\"compartment\" hasOnlySubstanceUnits=\"false\" boundaryCondition=\"false\" constant=\"false\" fbc:charge=\"0\" fbc:chemicalFormula=\"CO2\"/>\n      <species id=\"s2\" name=\"glucose\" compartment=\"compartment\" hasOnlySubstanceUnits=\"false\" boundaryCondition=\"false\" constant=\"false\" fbc:charge=\"0\" fbc:chemicalFormula=\"C6H12O6\"/>\n      <species id=\"s3\" name=\"oxygen\" compartment=\"compartment\" hasOnlySubstanceUnits=\"false\" boundaryCondition=\"false\" constant=\"false\" fbc:charge=\"0\" fbc:chemicalFormula=\"O2\"/>\n    </listOfSpecies>\n    <listOfReactions>\n      <reaction id=\"r1\" reversible=\"false\" fast=\"false\">\n        <notes>\n          <body xmlns=\"http://www.w3.org/1999/xhtml\">\n            <p>here is my note</p>\n          </body>\n        </notes>\n        <listOfReactants>\n          <speciesReference species=\"s1\" stoichiometry=\"1\" constant=\"false\"/>\n        </listOfReactants>\n        <listOfProducts>\n          <speciesReference species=\"s2\" stoichiometry=\"1\" constant=\"false\"/>\n          <speciesReference species=\"s3\" stoichiometry=\"1\" constant=\"false\"/>\n        </listOfProducts>\n      </reaction>\n    </listOfReactions>\n  </model>\n</sbml>"
 				},
 				"description": "Demonstration of the SBML endpoint"
 			},
@@ -42,9 +42,9 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{ \"photosynthesis\" : [\t[\"CO2\", 0, -1.0, \"carbon dioxide\"],[\"C6H12O6\", 0, 1.0, \"glucose\"],[\"O2\", 0, 1.0, \"oxygen\"]]}"
+					"raw": "{ \"photosynthesis\" :\n  [\t{\"formula\":\"CO2\", \"charge\":0, \"stoichiometry\":-1.0, \"name\":\"carbon dioxide\"},\n    {\"formula\":\"C6H12O6\", \"charge\":0, \"stoichiometry\":1.0, \"name\":\"glucose\"},\n    {\"formula\":\"O2\", \"charge\":0, \"stoichiometry\":1.0, \"name\":\"oxygen\"}\n  ]}"
 				},
-				"description": "Demonstration of the JSON endpoint"
+				"description": "Reaction balancer JSON endpoint"
 			},
 			"response": []
 		}

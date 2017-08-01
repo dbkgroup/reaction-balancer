@@ -6,8 +6,8 @@
     </listOfCompartments>
     <listOfSpecies>
       <species id="s1" name="carbon dioxide" compartment="compartment" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false" fbc:charge="0" fbc:chemicalFormula="CO2"/>
-      <species id="s2" name="glucose" compartment="compartment" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false" fbc:charge="0" fbc:chemicalFormula="O2"/>
-      <species id="s3" name="oxygen" compartment="compartment" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false"/>
+      <species id="s2" name="glucose" compartment="compartment" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false" fbc:charge="0" fbc:chemicalFormula="C6H12O6"/>
+      <species id="s3" name="oxygen" compartment="compartment" hasOnlySubstanceUnits="false" boundaryCondition="false" constant="false" fbc:charge="0" fbc:chemicalFormula="O2"/>
     </listOfSpecies>
     <listOfReactions>
       <reaction id="r1" reversible="false" fast="false">
@@ -17,7 +17,7 @@
           </body>
         </notes>
         <listOfReactants>
-          <speciesReference species="s1" stoichiometry="-1" constant="false"/>
+          <speciesReference species="s1" stoichiometry="1" constant="false"/>
         </listOfReactants>
         <listOfProducts>
           <speciesReference species="s2" stoichiometry="1" constant="false"/>
@@ -27,4 +27,6 @@
     </listOfReactions>
   </model>
 </sbml>
+
+
 
