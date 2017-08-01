@@ -37,10 +37,10 @@ def list_balancer(listOfRxns):
 				else:
 					msg = 'not brought into balance'
 			results[id] = {"reaction":balanced_rxn,"was_balanced":was_balanced,"is_balanced":is_balanced,"message":msg}
+			print 'List balancer: okay'
 		except Exception, e:
-			#print str(e)
-			#traceback.print_exc()
-			results[id] = {"reaction":False, "was_balanced":False, "is_balanced":False, "message":str(e)}
+			results[id] = {"reaction":rxn, "was_balanced":False, "is_balanced":False, "message":False}
+			print 'List balancer: error', str(e)
 	return results
 #----------------------------------------------------------
 
@@ -434,9 +434,9 @@ def list_json():
 			stoichiometry = mol[2]
 			name = mol[3]
 			verbose_reaction.append( {"formula":formula,"charge":charge,"stoichiometry":stoichiometry,"name":name} )
-		
+
 		#Update results list
-		results[rid] = verbose_reaction
+		results[rid] = {"reaction":verbose_reaction,"was_balanced":was_balanced,"is_balanced":is_balanced,"message":message}			results[rid] = verbose_reaction
 
 	return json.dumps(results)
 
