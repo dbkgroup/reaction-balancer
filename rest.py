@@ -386,11 +386,13 @@ def manual():
 def list_json():
 	print 'JSON balancer'
 	verboseListOfRxns = request.get_json(force=True)
+	print 'Incoming:', verboseListOfRxns
 
 	#Convert verbose JSON to Subliminal format
 	print 'Convert verbose JSON to Subliminal format'
 	listOfRxns = {}
-	for rid in listOfRxns:
+	for rid in verboseListOfRxns:
+		print rid
 		rxn = listOfRxns[rid]
 		
 		#Set of reaction components in lite subliminal format
@@ -410,11 +412,13 @@ def list_json():
 	#Run balance
 	print 'Run balancer'
 	newListOfRxns = list_balancer(listOfRxns)
+	print 'Results:', newListOfRxns
 
 	#Convert Subliminal format to more verbose JSON
 	print 'Convert Subliminal format to verbose JSON'
 	results = {}
 	for rid in newListOfRxns:
+		print rid
 		result = newListOfRxns[rid]
 		was_balanced = result["was_balanced"]
 		is_balanced = result["is_balanced"]
