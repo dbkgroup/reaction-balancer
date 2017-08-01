@@ -400,7 +400,7 @@ def list_json():
 		subliminal = []
 		for mol in rxn:
 			formula = str(mol["formula"])
-			charge = str(mol["charge"])
+			charge = mol["charge"]
 			stoichiometry = mol["stoichiometry"]
 			name = str(mol["name"])
 			row = [formula,charge,stoichiometry,name]
