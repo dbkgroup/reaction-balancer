@@ -141,6 +141,7 @@ def serviceFormat_to_sbml(doc,processed,lost):
 
 	#Add balance compartment
 	model.createCompartment()
+	print 'Add balance compartment'
 	c1 = model.createCompartment()
 	c1.setId('BALANCER')
 	c1.setConstant(True)
@@ -149,6 +150,7 @@ def serviceFormat_to_sbml(doc,processed,lost):
 	c1.setUnits('litre')
 	
 	#Add balance metabolites
+	print 'Add water balance'
 	s1 = model.createSpecies()
 	s1.setId('h2o_balancer')
 	s1.setCompartment('BALANCER')
@@ -161,6 +163,7 @@ def serviceFormat_to_sbml(doc,processed,lost):
 	splugin1.setCharge(0)
 	splugin1.setChemicalFormula("H2O")
 
+	print 'Add proton balance'
 	s2 = model.createSpecies()
 	s2.setId('h_balancer')
 	s2.setCompartment('BALANCER')
@@ -174,13 +177,15 @@ def serviceFormat_to_sbml(doc,processed,lost):
 	splugin2.setChemicalFormula("H")
 	
 	#Process reactions
+	print 'Process reactions'
 	listOfReactions = model.getListOfReactions()
 	for reaction in listOfReactions:
 		rid = reaction.getId()
-		#print 'Reaction ID:', rid
+		print 'Reaction ID:', rid
+		
 		#Have we processed this id?
 		if rid in processed:
-			#print 'Process', rid
+			print 'Processed', rid
 			dense = processed[rid]
 			rxn = dense[0]
 			was_balanced = dense[1]
@@ -188,66 +193,84 @@ def serviceFormat_to_sbml(doc,processed,lost):
 			msg = dense[3]
 			if was_balanced:
 				note = 'AUTO-BALANCER: already balanced'
+				print 'Was balanced'
 			else:
+				print "Wasn't balanced"
 				if is_balanced:
+					print "Is balanced"
+					
 					#Make a mini dictionary of results and add in balancer metabolites
 					mini = {}
 					for c in rxn:
-						id = c[3]
-						stoich = c[2]
-						mini[id] = stoich
+						id = c[3]			#Get as name
+						stoich = c[2]		#Get stoichiometry
+						mini[id] = stoich	
+
+						#Add in optional water
 						if id is 'h2o_balancer':
+							#Add as reactant
 							if stoich < 0:
 								reactant = reaction.createReactant()
 								reactant.setSpecies("h2o_balancer")
 								reactant.setStoichiometry(-1*stoich)
 								reactant.setConstant(False)
+							#Add as product
 							else:
 								product = reaction.createProduct()
 								product.setSpecies("h2o_balancer")
 								product.setStoichiometry(stoich)
 								product.setConstant(False)
+
+						#Add in optional proton
 						if id is 'h_balancer':
+							#Add as reactant
 							if stoich < 0:
 								reactant = reaction.createReactant()
 								reactant.setSpecies("h_balancer")
 								reactant.setStoichiometry(-1*stoich)
 								reactant.setConstant(False)
+							#Add as product
 							else:
 								product = reaction.createProduct()
 								product.setSpecies("h_balancer")
 								product.setStoichiometry(stoich)
 								product.setConstant(False)
 						
-					#Push results into model
+					#Push balance results from mini dictionary into model
+
+					#Reactants
 					reactants = reaction.getListOfReactants()
 					for reactant in reactants:
 						mid = reactant.getSpecies()
 						new_stoich = mini[mid]
 						reactant.setStoichiometry(new_stoich)
+
+					#Products
 					products = reaction.getListOfProducts()
 					for product in products:
 						mid = product.getSpecies()
 						new_stoich = mini[mid]
 						product.setStoichiometry(new_stoich)	
+
 					note = 'AUTO-BALANCER: brought into balance'
 				else:
+					print "Isn't balanced"
 					note = 'AUTO-BALANCER: not brought into balance'
 		#Report that the balancer could not be applied
 		else:
-			#print 'Unassessed', rid
+			print 'Unassessed', rid
 			note = 'AUTO-BALANCER: could not be assessed'
 
 		#Update notes
-		#print 'Set notes'
+		print 'Set notes'
 		if reaction.isSetNotes():
 			reaction.appendNotes('<body xmlns="http://www.w3.org/1999/xhtml"><p>' + note + '</p></body>')
 		else:
 			reaction.setNotes('<body xmlns="http://www.w3.org/1999/xhtml"><p>' + note + '</p></body>')
 
-	#print 'Write SBML'
+	print 'Write SBML'
 	newSBML = writeSBMLToString(doc)
-	#print 'Wrote SBML'
+	print 'Wrote SBML'
 
 	return newSBML
 
@@ -312,6 +335,7 @@ def sbml_balancer(string):
 			#print 'Processed:', processed
 			return new_sbml
 		except Exception as e:
+			print 'Could not update SBML file with balance results', str(e)
 			return 'Could not update SBML file with balance results', str(e)
 
 	return False
