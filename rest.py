@@ -1,5 +1,5 @@
 '''
-dbkgroup (c) University of Manchester 2016
+NaCTeM/DBK Group (c) University of Manchester 2017
 
 reaction-balancer is licensed under the MIT License.
 
@@ -29,7 +29,6 @@ def list_balancer(listOfRxns):
 		rxn = listOfRxns[id]
 		try:
 			is_balanced, was_balanced, balanced_rxn = balance.balance_reac(rxn,[('H', 1, 'h_balancer'), ('H2O', 0, 'h2o_balancer')])
-			balanced_rxn = simplifier(balanced_rxn)
 			if was_balanced:
 				msg = 'already balanced'
 			else:
@@ -37,59 +36,36 @@ def list_balancer(listOfRxns):
 					msg = 'brought into balance'
 				else:
 					msg = 'not brought into balance'
-			results[id] = [balanced_rxn,was_balanced,is_balanced,msg]
+			results[id] = {"reaction":balanced_rxn,"was_balanced":was_balanced,"is_balanced":is_balanced,"message":msg}
 		except Exception, e:
 			#print str(e)
 			#traceback.print_exc()
-			results[id] = [False, False, False, str(e)]
+			results[id] = {"reaction":False, "was_balanced":False, "is_balanced":False, "message":str(e)}
 	return results
+#----------------------------------------------------------
 
-#Check minimal reaction stoichiometries are enforced
-def simplifier(rxn):
-	met_counter = {}
-	met_tracker = {}
-	#Roll through metabolites adding stoichiometries for equivalents
-	for met in rxn:
-		formula = met[0]
-		charge = met[1]
-		name = met[3]
-		key = formula + "_" + str(charge) + "_" + name
-		stoich = met[2]
-		if key in met_counter:
-			print 'Naughty! Balancing was required'
-			val = met_counter[key]
-			met_counter[key] = val + stoich
-		else:
-			met_counter[key] = stoich
-		met_tracker[key] = [formula, charge, False, name]
-	#Rebuild reaction
-	new_reaction = []
-	for met in met_tracker:
-		val = met_tracker[met]
-		stoich = met_counter[met]
-		val[2] = stoich
-		new_reaction.append(val)
-	return new_reaction
+#----------------------------------------------------------
+#SBML functions
 
-#Extract species' formulae and charges
+#Extract species' formulae and charges from SBML
 def species_details(model):
 	speciesDict = {}
 	listOfSpecies = model.getListOfSpecies()
 	for species in listOfSpecies:
 		id = species.getId()
 		splugin = species.getPlugin("fbc")
-		status = True
+		status = True	#Set flag for reaction specification (if this flag is not switched all components were sufficiently specified)
 		#Get charge
 		try:
 			charge = splugin.getCharge()
 		except:
-			status = False
+			status = False	#Switch reaction specification flag
 			charge = False
 		#Get formula
 		try:
 			chemicalFormula = splugin.getChemicalFormula()
 		except:
-			status = False
+			status = False	#Switch reaction specification flag
 			chemicalFormula = False
 		#print id, [chemicalFormula, charge, status]
 		speciesDict[id] = [chemicalFormula, charge, status]
@@ -98,18 +74,24 @@ def species_details(model):
 #Convert SBML to service format
 def sbml_to_serviceFormat(model):
 	print 'sbml_to_service'
-	#Get species
+
+	#Get species information from SBML
 	speciesDict = species_details(model)
 
-	#Get reactions
+	#Split reactions into processable (all components sufficiently specified) and lost (at least one component insufficiently specified)
+	#sufficiently specified means both formula and charge are reported using the fbc package
 	processable_rxns = {}		#Can be sent to balancer
 	lost_rxns = {}				#Cannot be sent to balancer (some components underspecified)
+
+	#Get reactions from listOfReactions	
 	listOfReactions = model.getListOfReactions()
 	for rxn in listOfReactions:
 		dense = []
 		reactionStatus = True
-		rid = rxn.getId()
-		reactants = rxn.getListOfReactants() #list of speciesReferences
+		rid = rxn.getId()	#Reaction identifier
+		
+		#Get reactants from listOfReactants
+		reactants = rxn.getListOfReactants() 	#list of speciesReferences
 		for r in reactants:
 			#Species id
 			mid = r.getSpecies()
@@ -117,14 +99,16 @@ def sbml_to_serviceFormat(model):
 			details = speciesDict[mid]
 			formula = details[0]
 			charge = details[1]
-			status = details[2]
+			status = details[2]	#Status flags whether or not a molecular species is sufficiently specified for the balancer
 			#Get stoichiometry
 			stoich = r.getStoichiometry()
-			if status:
+			if status:	#If sufficiently specified add to list
 				row = [formula,charge,-1*stoich,mid]
 				dense.append(row)
-			else:
+			else:		#Else bail out and flag reaction as lost (cannot be balanced)
 				reactionStatus = False
+				
+		#Get products from listOfProducts
 		products = rxn.getListOfProducts() 
 		for p in products:
 			#Species id
@@ -141,11 +125,13 @@ def sbml_to_serviceFormat(model):
 				dense.append(row)
 			else:
 				reactionStatus = False
+
 		#Validate reaction
-		if reactionStatus:
+		if reactionStatus: 	#If all components are sufficiently specified add reaction to the processable list
 			processable_rxns[rid] = dense
-		else:
+		else:				#If some components are insufficiently specified add reaction to the list list
 			lost_rxns[rid] = False
+			
 	return processable_rxns, lost_rxns
 
 #Convert service format to SBML
@@ -331,13 +317,15 @@ def sbml_balancer(string):
 	return False
 #----------------------------------------------------------
 
-#Endpoint for humans to read
-#Landing page
+#----------------------------------------------------------
+#ENDPOINTS
+
+#Landing page for human interface
 @app.route('/')
 def index():
 	return app.send_static_file('index.html')
 
-#Endpoint to be used by human UI
+#Endpoint to be used by human interface
 @app.route('/balance/manual', methods=['POST'])
 def manual():
 	print 'Human UI'
@@ -347,22 +335,30 @@ def manual():
 		if str(c[0]) is not '':
 			tidyComponent = [ str(c[0]), int(c[1]), float(c[2]), str(c[3]) ]
 			tidyList.append(tidyComponent)
+
+	#Use the user-supplied reaction
 	if len(tidyList) > 0:
 		serviceFormat = { "human" : tidyList}
+	#Use the default reaction
 	else:
 		print 'Running default...'
 		serviceFormat = { "human" : [["CO2",0,-1.0,"carbon dioxide"],["C6H12O6",0,1.0,"glucose"],["O2",0,1.0,"oxygen"]] }
+
+	#Run reaction
 	print 'Hitting balancer...'
 	results = list_balancer(serviceFormat)
 	print '...complete'
 	
+	#Process results
 	print 'Converting result...'
 	response = results["human"]
-	reaction = response[0]
-	was_balanced = response[1]
-	is_balanced = response[2]
-	msg = response[3]
+	reaction = response["reaction"]
+	was_balanced = response["was_balanced"]
+	is_balanced = response["is_balanced"]
+	msg = response["message"]
 	print reaction
+	
+	#Make reaction into string format
 	reactants = []
 	products = []
 	for component in reaction:
@@ -382,13 +378,56 @@ def manual():
 	productString = ' + '.join(products)
 	reactionString = reactantString + '  ->  ' + productString
 	print reactionString
+	
 	return reactionString
 
 #JSON endpoint
 @app.route('/balance/json', methods=['POST'])
 def list_json():
-	listOfRxns = request.get_json(force=True)
-	results = list_balancer(listOfRxns)
+	verboseListOfRxns = request.get_json(force=True)
+
+	#Convert verbose JSON to Subliminal format
+	listOfRxns = {}
+	for rid in listOfRxns:
+		rxn = listOfRxns[rid]
+		
+		#Set of reaction components in lite subliminal format
+		subliminal = []
+		for mol in rxn:
+			formula = rxn["formula"]
+			charge = rxn["charge"]
+			stochiometry = rxn["stoichiometry"]
+			name = rxn["name"]
+			row = [formula,charge,stoichiometry,name]
+			subliminal.append(row)
+		
+		#Add set to listOfRxns
+		listOfRxns[rid] = subliminal
+
+	#Run balance
+	newListOfRxns = list_balancer(listOfRxns)
+
+	#Convert Subliminal format to more verbose JSON
+	results = {}
+	for rid in newListOfRxns:
+		result = newListOfRxns[rid]
+		was_balanced = result["was_balanced"]
+		is_balanced = result["is_balanced"]
+		message = result["message"]
+		reaction = result["reaction"]
+
+		#Get the list of reaction components
+		verbose_reaction = []
+		for component in reaction:
+			formula = component[0]
+			charge = component[1]
+			stoichiometry = component[2]
+			name = component[3]
+			verbose_reaction.append( {"formula":formula,"charge":charge,"stoichiometry":stoichiometry,"name":name} )
+		
+		#Update results list
+		results[rid] = verbose_reaction
+
 	return json.dumps(results)
 
 #SBML endpoint
@@ -401,6 +440,7 @@ def sbml():
 		return 'Could not access SBML data'
 	response = sbml_balancer(sbmlString)
 	return response
+#----------------------------------------------------------
 
 if __name__ == '__main__':
 	#main()

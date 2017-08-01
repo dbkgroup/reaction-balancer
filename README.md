@@ -1,13 +1,12 @@
 # Automatic chemical reaction balancer
-A web service for automatically balancing chemical reaction stoichiometries. You will need to install Docker to run the service locally.
+A web service for automatically balancing chemical reaction stoichiometries.
 
-## From Docker
-```docker run -p XXXX:8080 compsysbio/reaction-balancer``` (where XXXX is the port you wish to expose on).
+A live web service is available at ...
+
+You will need to install Docker to run the service locally.
 
 ## How to set up the service from Github
-Clone or download the repository.
-
-Move into the web_service folder.
+Clone or download the repository. From inside the repository...
 
 Run: ```docker build -t balancer .```
 
@@ -24,9 +23,9 @@ The JSON endpoint at ```http://<URL>:<PORT>/balance/json``` accepts a reaction i
 An example follows (incomplete gross photosynthetic reaction)...
 ```
 { "photosynthesis" :
-  [	["CO2", 0, -1.0, "carbon dioxide"],
-    ["C6H12O6", 0, 1.0, "glucose"],
-    ["O2", 0, 1.0, "oxygen"]
+  [	{"formula":"CO2", "charge":0, "stoichiometry":-1.0, "name":"carbon dioxide"},
+    {"formula":"C6H12O6", "charge":0, "stoichiometry":1.0, "name":"glucose"},
+    {"formula":"O2", "charge":0, "stiochiometry":1.0, "name":"oxygen"]
   ]}
 ```
 The response is as follows...
@@ -36,15 +35,15 @@ The response is as follows...
 For example...
 ```
 { "photosynthesis" :
-  [
-    [	["H2O", 0, -6.0, "water"],
-      ["CO2", 0, -6.0, "carbon dioxide"],
-      ["C6H12O6", 0, 1.0, "glucose"],
-      ["O2", 0, 6.0, "oxygen"]
+  {"reaction":
+    [ {"formula":"H2O", "charge":0, "stoichiometry":-6.0, "name":"water"},
+      {"formula":"CO2", "charge":0, "stoichiometry":-6.0, "name":"carbon dioxide"},
+      {"formula":"C6H12O6", "charge":0, "stoichiometry":1.0, "name":"glucose"},
+      {"formula":"O2", "charge":0, "stoichiometry":6.0, "name":"oxygen"}
     ],
-   False,
-   True,
-  "brought into balance"
+   "was_balanced":False,
+   "is_balanced":True,
+   "message":"brought into balance"
   ]
 }
 
