@@ -392,22 +392,23 @@ def list_json():
 	print 'Convert verbose JSON to Subliminal format'
 	listOfRxns = {}
 	for rid in verboseListOfRxns:
-		print rid
+		print rid, 
 		rxn = verboseListOfRxns[rid]
+		print rxn
 		
 		#Set of reaction components in lite subliminal format
 		subliminal = []
 		for mol in rxn:
-			formula = rxn["formula"]
-			charge = rxn["charge"]
-			stoichiometry = rxn["stoichiometry"]
-			name = rxn["name"]
+			formula = str(mol["formula"])
+			charge = str(mol["charge"])
+			stoichiometry = mol["stoichiometry"]
+			name = str(mol["name"])
 			row = [formula,charge,stoichiometry,name]
 			subliminal.append(row)
 		
 		#Add set to listOfRxns
 		listOfRxns[rid] = subliminal
-	print listOfRxns
+	print 'Subliminal (all):', listOfRxns
 
 	#Run balance
 	print 'Run balancer'
@@ -427,11 +428,11 @@ def list_json():
 
 		#Get the list of reaction components
 		verbose_reaction = []
-		for component in reaction:
-			formula = component[0]
-			charge = component[1]
-			stoichiometry = component[2]
-			name = component[3]
+		for mol in reaction:
+			formula = mol[0]
+			charge = mol[1]
+			stoichiometry = mol[2]
+			name = mol[3]
 			verbose_reaction.append( {"formula":formula,"charge":charge,"stoichiometry":stoichiometry,"name":name} )
 		
 		#Update results list
