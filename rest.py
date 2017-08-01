@@ -187,10 +187,13 @@ def serviceFormat_to_sbml(doc,processed,lost):
 		if rid in processed:
 			print 'Processed', rid
 			dense = processed[rid]
+			print dense
 			rxn = dense[0]
 			was_balanced = dense[1]
 			is_balanced = dense[2]
 			msg = dense[3]
+			
+			#Look for changes
 			if was_balanced:
 				note = 'AUTO-BALANCER: already balanced'
 				print 'Was balanced'
