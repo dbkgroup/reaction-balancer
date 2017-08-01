@@ -393,14 +393,14 @@ def list_json():
 	listOfRxns = {}
 	for rid in verboseListOfRxns:
 		print rid
-		rxn = listOfRxns[rid]
+		rxn = verboseListOfRxns[rid]
 		
 		#Set of reaction components in lite subliminal format
 		subliminal = []
 		for mol in rxn:
 			formula = rxn["formula"]
 			charge = rxn["charge"]
-			stochiometry = rxn["stoichiometry"]
+			stoichiometry = rxn["stoichiometry"]
 			name = rxn["name"]
 			row = [formula,charge,stoichiometry,name]
 			subliminal.append(row)
