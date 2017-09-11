@@ -3,14 +3,14 @@
 	"info": {
 		"name": "reaction-balancer",
 		"_postman_id": "b2bea482-c95f-91cb-46f9-d6377d9e6892",
-		"description": "",
+		"description": "Examples of hitting the reaction-balancer web service at www.nactem.ac.uk/balancer",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "http://knime.mib.man.ac.uk:8080/balance/SBML",
+			"name": "http://www.nactem.ac.uk/balancer/balance/SBML",
 			"request": {
-				"url": "http://localhost:8080/balance/SBML",
+				"url": "http://www.nactem.ac.uk/balancer/balance/SBML",
 				"method": "POST",
 				"header": [
 					{
@@ -29,9 +29,9 @@
 			"response": []
 		},
 		{
-			"name": "http://knime.mib.man.ac.uk:8080/balance/json",
+			"name": "http://www.nactem.ac.uk/balancer/balance/json",
 			"request": {
-				"url": "http://knime.mib.man.ac.uk:8080/balance/json",
+				"url": "http://www.nactem.ac.uk/balancer/balance/json",
 				"method": "POST",
 				"header": [
 					{

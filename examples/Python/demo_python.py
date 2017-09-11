@@ -1,7 +1,7 @@
 import requests, json
 
 #URL or balancing service
-BALANCER_URL = 'http://knime.mib.man.ac.uk:8080/balance'
+BALANCER_URL = 'http://www.nactem.ac.uk/balancer/balance'
 
 #Function to send a JSON format reaction to the JSON endpoint
 def json_balancer(reaction,URL=BALANCER_URL):
