@@ -76,7 +76,7 @@ function balanceString() {
 			document.getElementById("balance").innerHTML = this.responseText;
 			}
  		};
-	xhttp.open("POST", "/balance/manual", true);
+	xhttp.open("POST", "./balance/manual", true);
   	xhttp.send( JSON.stringify(rxn) );
 	return false;
 	}

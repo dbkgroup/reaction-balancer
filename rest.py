@@ -357,6 +357,7 @@ def manual():
 	print 'Human UI'
 	content = request.get_json(force=True)
 	tidyList = []
+	print 'Received:', tidyList
 	for c in content:
 		if str(c[0]) is not '':
 			tidyComponent = [ str(c[0]), int(c[1]), float(c[2]), str(c[3]) ]
