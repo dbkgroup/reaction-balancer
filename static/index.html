@@ -92,32 +92,23 @@ function balanceString() {
 	console.log("Reaction:", rxn);
 	
 	document.getElementById("balance").innerHTML = 'Balancing...';
-	console.log('Make xhttp request object');
 	var xhttp = new XMLHttpRequest();
-	console.log('Made xhttp request object');
-	console.log('onreadystatechange function');
 	xhttp.onreadystatechange = function() {
-		console.log('Running onreadystatechangefunction');
-		console.log('This');
 		console.log(this);
 		if (this.readyState == 4 && this.status == 200) {
 			console.log('You said', this.responseText);
 			document.getElementById("balance").innerHTML = this.responseText;
 			}
  		};
- 	console.log('POST xhttp');
  	if (isChrome()) {
  		console.log('Chrome');
-		xhttp.open("POST", "./balance/manual", true);
+		xhttp.open("POST", "/balance/manual", true);
  		}
  	else {
  		console.log('Not Chrome');
 		xhttp.open("POST", "./balancer/balance/manual", true);
  		}
-	console.log('xhttp POSTed');
-	console.log('xhttp SEND');
   	xhttp.send( JSON.stringify(rxn) );
-	console.log('xhttp sent');
 	return false;
 	}
 </script>
