@@ -75,6 +75,8 @@ function balanceString() {
 	console.log('onreadystatechange function');
 	xhttp.onreadystatechange = function() {
 		console.log('Running onreadystatechangefunction');
+		console.log('This');
+		console.log(this);
 		if (this.readyState == 4 && this.status == 200) {
 			console.log('You said', this.responseText);
 			document.getElementById("balance").innerHTML = this.responseText;
