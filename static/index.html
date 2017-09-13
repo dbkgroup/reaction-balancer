@@ -43,6 +43,35 @@ You can trial the reaction balancer manually below.<br><br>
 
 
 <script>
+function myBrowser() { 
+	var browser = '';
+	if((navigator.userAgent.indexOf("Opera") || navigator.userAgent.indexOf('OPR')) != -1 ) {
+		alert('Opera');
+		browser = 'Opera';
+		}
+	else if(navigator.userAgent.indexOf("Chrome") != -1 ) {
+		alert('Chrome');
+		browser = 'Chrome';
+		}
+	else if(navigator.userAgent.indexOf("Safari") != -1) {
+		alert('Safari');
+		browser = 'Safari';
+		}
+	else if(navigator.userAgent.indexOf("Firefox") != -1 ) {
+		alert('Firefox');
+		browser = 'Firefox';
+		}
+	else if((navigator.userAgent.indexOf("MSIE") != -1 ) || (!!document.documentMode == true )) //IF IE > 10 {
+		alert('IE'); 
+		browser = 'IE';
+		}  
+	else {
+		alert('unknown');
+		browser = 'unknown';
+		}
+	return browser;
+	}
+
 function balanceString() {
 	//Reactants
 	var r1name = document.forms["myForm"]["reactant1.name"].value;
@@ -68,6 +97,9 @@ function balanceString() {
 	var rxn = [[r1formula,r1charge,-1,r1name],[r2formula,r2charge,-1,r2name],[r3formula,r3charge,-1,r3name],[p1formula,p1charge,1,p1name],[p2formula,p2charge,1,p2name],[p3formula,p3charge,1,p3name]];
 	console.log("Reaction:", rxn);
 	
+	browser = myBrowser();
+	console.log('Browser:', browser);
+	
 	document.getElementById("balance").innerHTML = 'Balancing...';
 	console.log('Make xhttp request object');
 	var xhttp = new XMLHttpRequest();
@@ -83,7 +115,13 @@ function balanceString() {
 			}
  		};
  	console.log('POST xhttp');
-	xhttp.open("POST", "./balancer/balance/manual", true);
+ 	if(browser == 'Chrome') {
+ 		console.log('Switching for Chrome');
+		xhttp.open("POST", "./balance/manual", true);
+		}
+	else {
+		xhttp.open("POST", "./balancer/balance/manual", true);
+		}
 	console.log('xhttp POSTed');
 	console.log('xhttp SEND');
   	xhttp.send( JSON.stringify(rxn) );
