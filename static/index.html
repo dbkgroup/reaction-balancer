@@ -69,15 +69,23 @@ function balanceString() {
 	console.log("Reaction:", rxn);
 	
 	document.getElementById("balance").innerHTML = 'Balancing...';
+	console.log('Make xhttp request object');
 	var xhttp = new XMLHttpRequest();
+	console.log('Made xhttp request object');
+	console.log('onreadystatechange function');
 	xhttp.onreadystatechange = function() {
+		console.log('Running onreadystatechangefunction');
 		if (this.readyState == 4 && this.status == 200) {
 			console.log('You said', this.responseText);
 			document.getElementById("balance").innerHTML = this.responseText;
 			}
  		};
+ 	console.log('POST xhttp');
 	xhttp.open("POST", "./balance/manual", true);
+	console.log('xhttp POSTed');
+	console.log('xhttp SEND');
   	xhttp.send( JSON.stringify(rxn) );
+	console.log('xhttp sent');
 	return false;
 	}
 </script>
