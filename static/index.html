@@ -107,9 +107,11 @@ function balanceString() {
  		};
  	console.log('POST xhttp');
  	if (isChrome()) {
+ 		console.log('Chrome');
 		xhttp.open("POST", "./balance/manual", true);
  		}
  	else {
+ 		console.log('Not Chrome');
 		xhttp.open("POST", "./balancer/balance/manual", true);
  		}
 	xhttp.open("POST", "./balance/manual", true);
